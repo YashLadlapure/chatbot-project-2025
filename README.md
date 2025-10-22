@@ -1,8 +1,11 @@
 # 🤖 Chatbot Project
-
 [![GitHub](https://img.shields.io/badge/GitHub-chatbot--project--2025-blue?logo=github)](https://github.com/YashLadlapure/chatbot-project-2025)
 
 A modern, full-stack chatbot application featuring dark mode, syntax highlighting, and mobile responsiveness. Built with React and Express, containerized with Docker, and ready for deployment on free cloud platforms.
+
+## 🔗 Live Demo
+
+Check out the live demo of the chatbot project: [Live Demo](https://your-demo-url.com)
 
 ## ✨ Features
 
@@ -26,7 +29,6 @@ A modern, full-stack chatbot application featuring dark mode, syntax highlightin
 - ☁️ **Cloud Ready** - Deployable on free platforms (Render, Railway, Fly.io)
 
 ## 📁 Project Structure
-
 ```
 chatbot-project-2025/
 ├── frontend/               # React frontend application
@@ -39,205 +41,202 @@ chatbot-project-2025/
 │   ├── server.js          # API server implementation
 │   └── package.json       # Backend dependencies
 │
-├── Dockerfile             # Multi-stage Docker build
-├── docker-compose.yml     # Container orchestration (to be added)
-├── nginx.conf             # Nginx configuration (to be added)
-└── README.md              # This file
+├── docker-compose.yml      # Docker Compose configuration
+├── Dockerfile             # Production Docker setup
+└── README.md              # Project documentation
 ```
 
-## 🚀 Quick Start
+## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 18+ and npm
+- Node.js (v18 or higher)
+- npm or yarn
 - Docker (optional, for containerized deployment)
 
 ### Local Development
 
-#### 1. Clone the Repository
-```bash
-git clone https://github.com/YashLadlapure/chatbot-project-2025.git
-cd chatbot-project-2025
-```
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/YashLadlapure/chatbot-project-2025.git
+   cd chatbot-project-2025
+   ```
 
-#### 2. Setup Backend
-```bash
-cd backend
-npm install
-npm start
-# Server runs on http://localhost:3001
-```
+2. **Install dependencies**
+   ```bash
+   # Install backend dependencies
+   cd backend
+   npm install
+   
+   # Install frontend dependencies
+   cd ../frontend
+   npm install
+   ```
 
-#### 3. Setup Frontend (in a new terminal)
-```bash
-cd frontend
-npm install
-npm run dev
-# Frontend runs on http://localhost:5173
-```
+3. **Run the development servers**
+   
+   Terminal 1 (Backend):
+   ```bash
+   cd backend
+   npm run dev
+   ```
+   
+   Terminal 2 (Frontend):
+   ```bash
+   cd frontend
+   npm run dev
+   ```
 
-#### 4. Environment Variables
-Create a `.env` file in the backend directory:
-```env
-PORT=3001
-# Add your AI API keys here
-# OPENAI_API_KEY=your_key_here
-```
+4. **Access the application**
+   - Frontend: http://localhost:5173
+   - Backend: http://localhost:3000
 
-## 🐳 Docker Deployment
+### Docker Deployment
 
-### Build and Run
-```bash
-# Build the Docker image
-docker build -t chatbot-app .
+1. **Build and run with Docker Compose**
+   ```bash
+   docker-compose up --build
+   ```
 
-# Run the container
-docker run -p 80:80 -p 3001:3001 chatbot-app
-```
+2. **Access the application**
+   - Application: http://localhost
 
-Access the application at `http://localhost`
+## 🌐 Deployment Options
 
-## ☁️ Cloud Deployment
-
-### Deploy on Render (Free)
-
-#### Backend:
-1. Create a new **Web Service** on [Render](https://render.com)
+### Option 1: Render
+1. Create a new Web Service
 2. Connect your GitHub repository
-3. Configure:
-   - **Root Directory**: `backend`
-   - **Build Command**: `npm install`
-   - **Start Command**: `npm start`
-   - **Environment Variables**: Add your API keys
+3. Set the build command: `npm install && npm run build`
+4. Set the start command: `npm start`
+5. Add environment variables if needed
 
-#### Frontend:
-1. Create a new **Static Site** on Render
-2. Configure:
-   - **Root Directory**: `frontend`
-   - **Build Command**: `npm install && npm run build`
-   - **Publish Directory**: `dist`
-   - **Environment Variable**: `VITE_API_URL=your-backend-url`
+### Option 2: Railway
+1. Create a new project
+2. Connect your GitHub repository
+3. Railway will auto-detect your setup
+4. Deploy with one click
 
-### Deploy on Railway (Free)
+### Option 3: Fly.io
+1. Install flyctl CLI
+2. Run `fly launch`
+3. Follow the prompts
+4. Deploy with `fly deploy`
 
-1. Install [Railway CLI](https://docs.railway.app/develop/cli)
-2. Run:
-```bash
-railway login
-railway init
-railway up
-```
+### Option 4: Vercel (Frontend only)
+1. Import your GitHub repository
+2. Set the framework preset to Vite
+3. Deploy automatically
 
-### Deploy on Fly.io (Free)
+## 🛠️ Configuration
 
-1. Install [flyctl](https://fly.io/docs/hands-on/install-flyctl/)
-2. Run:
-```bash
-fly auth login
-fly launch
-fly deploy
-```
+### Environment Variables
 
-### Deploy on Vercel (Frontend) + Render (Backend)
-
-#### Frontend on Vercel:
-```bash
-cd frontend
-npm install -g vercel
-vercel
-```
-
-#### Backend on Render (as above)
-
-## 🔧 Configuration
-
-### Frontend Environment Variables
-Create `frontend/.env`:
+**Backend (.env)**
 ```env
-VITE_API_URL=http://localhost:3001
+PORT=3000
+CORS_ORIGIN=http://localhost:5173
 ```
 
-### Backend Environment Variables
-Create `backend/.env`:
+**Frontend (if needed)**
 ```env
-PORT=3001
-NODE_ENV=production
-# Add your AI service API keys
+VITE_API_URL=http://localhost:3000
+```
+
+## 📚 API Documentation
+
+### Endpoints
+
+#### POST /api/chat
+Send a message to the chatbot
+
+**Request:**
+```json
+{
+  "message": "Hello, chatbot!"
+}
+```
+
+**Response:**
+```json
+{
+  "reply": "Hi! I'm here to help. What can I do for you today?"
+}
+```
+
+#### GET /health
+Check server health status
+
+**Response:**
+```json
+{
+  "status": "OK",
+  "timestamp": "2025-01-20T12:00:00.000Z"
+}
 ```
 
 ## 🎨 Customization
 
 ### Theme Colors
-Edit `frontend/src/App.css` to customize colors:
+Edit `frontend/src/App.css` to customize the theme:
+
 ```css
 :root {
-  --bg-light: #ffffff;
-  --text-light: #333333;
-  --msg-user-light: #007bff;
-  /* ... more variables */
+  --primary-color: #007bff;
+  --background: #ffffff;
+  --text: #333333;
 }
-```
 
-### AI Integration
-Replace the echo bot in `backend/server.js` with your preferred AI service:
-- OpenAI GPT
-- Anthropic Claude
-- Cohere
-- Hugging Face models
-
-Example (OpenAI):
-```javascript
-const OpenAI = require('openai');
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-
-app.post('/api/chat', async (req, res) => {
-  const response = await openai.chat.completions.create({
-    model: 'gpt-3.5-turbo',
-    messages: [{ role: 'user', content: req.body.message }]
-  });
-  res.json({ reply: response.choices[0].message.content });
-});
-```
-
-## 📊 API Endpoints
-
-### Health Check
-```
-GET /health
-Response: { "status": "healthy", "timestamp": "ISO-8601" }
-```
-
-### Chat
-```
-POST /api/chat
-Body: { "message": "Your message here" }
-Response: { "reply": "Bot response" }
+[data-theme="dark"] {
+  --background: #1a1a1a;
+  --text: #ffffff;
+}
 ```
 
 ## 🧪 Testing
 
-### Backend Tests
 ```bash
+# Run frontend tests
+cd frontend
+npm test
+
+# Run backend tests
 cd backend
 npm test
 ```
 
-### Frontend Tests
-```bash
-cd frontend
-npm test
-```
+## 🐛 Troubleshooting
 
-## 📝 Best Practices
+### Common Issues
 
-1. **Security**
-   - Never commit `.env` files
-   - Use environment variables for sensitive data
-   - Implement rate limiting in production
+1. **Port already in use**
+   - Change the PORT in your .env file
+   - Kill the process using the port: `lsof -ti:3000 | xargs kill`
 
-2. **Performance**
-   - Enable caching for static assets
+2. **CORS errors**
+   - Ensure CORS_ORIGIN in backend .env matches your frontend URL
+   - Check that the backend is running
+
+3. **Docker build fails**
+   - Clear Docker cache: `docker system prune -a`
+   - Rebuild: `docker-compose up --build --force-recreate`
+
+## 🔒 Security
+
+- Keep dependencies updated
+- Use environment variables for sensitive data
+- Enable HTTPS in production
+- Implement rate limiting for API endpoints
+
+## 🚧 Best Practices
+
+1. **Performance**
+   - Minimize bundle size
    - Implement lazy loading for large components
    - Use production builds for deployment
+
+2. **Security**
+   - Sanitize user inputs
+   - Use HTTPS in production
+   - Keep dependencies updated
 
 3. **Code Quality**
    - Follow ESLint rules
