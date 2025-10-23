@@ -1,11 +1,12 @@
 # 🤖 Chatbot Project
-[![GitHub](https://img.shields.io/badge/GitHub-chatbot--project--2025-blue?logo=github)](https://github.com/YashLadlapure/chatbot-project-2025)
+
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/YashLadlapure/chatbot-project-2025)
 
 A modern, full-stack chatbot application featuring dark mode, syntax highlighting, and mobile responsiveness. Built with React and Express, containerized with Docker, and ready for deployment on free cloud platforms.
 
 ## 🔗 Live Demo
 
-Check out the live demo of the chatbot project: [Live Demo](https://your-demo-url.com)
+Check out the live demo of the chatbot project: [Live Demo](https://your-demo-url.com/)
 
 ## ✨ Features
 
@@ -22,6 +23,7 @@ Check out the live demo of the chatbot project: [Live Demo](https://your-demo-ur
 - 🛡️ **CORS Enabled** - Cross-origin resource sharing configured
 - 📊 **Health Check Endpoint** - Monitor server status
 - 🔧 **Environment Variables** - Secure configuration management
+- 🤖 **Gemini AI Integration** - Powered by Google's Gemini API for intelligent responses
 
 ### DevOps
 - 🐳 **Docker Support** - Multi-stage Dockerfile for production
@@ -29,19 +31,21 @@ Check out the live demo of the chatbot project: [Live Demo](https://your-demo-ur
 - ☁️ **Cloud Ready** - Deployable on free platforms (Render, Railway, Fly.io)
 
 ## 📁 Project Structure
+
 ```
 chatbot-project-2025/
-├── frontend/               # React frontend application
+├── frontend/              # React frontend application
 │   ├── src/
-│   │   ├── App.jsx        # Main application component
-│   │   └── App.css        # Styling with theme support
-│   └── package.json       # Frontend dependencies
+│   │   ├── App.jsx       # Main application component
+│   │   └── App.css       # Styling with theme support
+│   └── package.json      # Frontend dependencies
 │
-├── backend/                # Express backend server
-│   ├── server.js          # API server implementation
-│   └── package.json       # Backend dependencies
+├── backend/               # Express backend server
+│   ├── server.js         # API server implementation with Gemini AI
+│   ├── .env.template     # Environment variables template
+│   └── package.json      # Backend dependencies
 │
-├── docker-compose.yml      # Docker Compose configuration
+├── docker-compose.yml     # Docker Compose configuration
 ├── Dockerfile             # Production Docker setup
 └── README.md              # Project documentation
 ```
@@ -52,6 +56,7 @@ chatbot-project-2025/
 - Node.js (v18 or higher)
 - npm or yarn
 - Docker (optional, for containerized deployment)
+- Gemini API Key (get from https://makersuite.google.com/app/apikey)
 
 ### Local Development
 
@@ -61,18 +66,25 @@ chatbot-project-2025/
    cd chatbot-project-2025
    ```
 
-2. **Install dependencies**
+2. **Set up Backend**
    ```bash
-   # Install backend dependencies
    cd backend
    npm install
    
-   # Install frontend dependencies
+   # Create .env file from template
+   cp .env.template .env
+   
+   # Edit .env and add your GEMINI_API_KEY
+   # GEMINI_API_KEY=your_actual_api_key_here
+   ```
+
+3. **Set up Frontend**
+   ```bash
    cd ../frontend
    npm install
    ```
 
-3. **Run the development servers**
+4. **Run the development servers**
    
    Terminal 1 (Backend):
    ```bash
@@ -86,7 +98,7 @@ chatbot-project-2025/
    npm run dev
    ```
 
-4. **Access the application**
+5. **Access the application**
    - Frontend: http://localhost:5173
    - Backend: http://localhost:3000
 
@@ -126,6 +138,90 @@ chatbot-project-2025/
 2. Set the framework preset to Vite
 3. Deploy automatically
 
+## 📋 Backend/API Deployment Notes
+
+### Environment Setup for Cloud Hosting
+
+When deploying to cloud platforms (Vercel, Render, Railway, etc.), follow these steps:
+
+#### 1. Backend Deployment
+
+**For Render/Railway/Fly.io:**
+- Deploy the backend as a separate service
+- Set environment variables in the platform dashboard:
+  - `GEMINI_API_KEY`: Your Google Gemini API key (required)
+  - `PORT`: Will be auto-assigned by most platforms
+  - `CORS_ORIGIN`: Set to your frontend URL (e.g., https://your-app.vercel.app)
+
+**Backend Setup Checklist:**
+- ✅ Copy `.env.template` to `.env` locally for development
+- ✅ Never commit your actual `.env` file with real API keys
+- ✅ Set `GEMINI_API_KEY` in your hosting platform's environment variables
+- ✅ Update `CORS_ORIGIN` to match your frontend deployment URL
+- ✅ Test the `/health` endpoint to verify backend is running
+- ✅ Test the `/api/chat` endpoint with a sample message
+
+#### 2. Frontend Deployment
+
+**For Vercel/Netlify:**
+- Deploy the frontend separately
+- Set the `VITE_API_URL` environment variable:
+  - Local development: `http://localhost:3001`
+  - Production: Your backend URL (e.g., `https://your-backend.onrender.com`)
+
+**Frontend Setup Checklist:**
+- ✅ Set `VITE_API_URL` environment variable in Vercel/Netlify dashboard
+- ✅ Ensure the backend URL is accessible (CORS configured)
+- ✅ Build command: `npm run build`
+- ✅ Output directory: `dist`
+
+#### 3. Full-Stack Deployment Examples
+
+**Example 1: Vercel (Frontend) + Render (Backend)**
+```bash
+# Render (Backend)
+- Repository: Select backend folder
+- Build Command: npm install
+- Start Command: npm start
+- Environment Variables:
+  - GEMINI_API_KEY=your_key_here
+  - CORS_ORIGIN=https://your-app.vercel.app
+
+# Vercel (Frontend)
+- Root Directory: frontend
+- Framework Preset: Vite
+- Environment Variables:
+  - VITE_API_URL=https://your-backend.onrender.com
+```
+
+**Example 2: Railway (Full-Stack)**
+```bash
+# Create two services in one project:
+# Service 1: Backend
+  - Root: /backend
+  - Environment: Add GEMINI_API_KEY
+  
+# Service 2: Frontend  
+  - Root: /frontend
+  - Environment: Add VITE_API_URL pointing to backend service
+```
+
+#### 4. API Key Management
+
+**Getting Your Gemini API Key:**
+1. Visit https://makersuite.google.com/app/apikey
+2. Sign in with your Google account
+3. Create a new API key
+4. Copy the key and store it securely
+5. **Never commit API keys to your repository**
+
+**Security Best Practices:**
+- Use `.env.template` as a reference (committed to repo)
+- Keep actual `.env` in `.gitignore` (never committed)
+- Set API keys only in hosting platform environment variables
+- Rotate API keys periodically for security
+- Monitor API usage in Google AI Studio
+
 ## 🛠️ Configuration
 
 ### Environment Variables
@@ -134,9 +230,10 @@ chatbot-project-2025/
 ```env
 PORT=3000
 CORS_ORIGIN=http://localhost:5173
+GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
-**Frontend (if needed)**
+**Frontend (Optional)**
 ```env
 VITE_API_URL=http://localhost:3000
 ```
@@ -176,6 +273,7 @@ Check server health status
 ## 🎨 Customization
 
 ### Theme Colors
+
 Edit `frontend/src/App.css` to customize the theme:
 
 ```css
@@ -219,12 +317,20 @@ npm test
    - Clear Docker cache: `docker system prune -a`
    - Rebuild: `docker-compose up --build --force-recreate`
 
+4. **Gemini API errors**
+   - Verify your API key is correct
+   - Check API key is set in environment variables
+   - Ensure you have API quota available
+   - Visit https://makersuite.google.com to check API status
+
 ## 🔒 Security
 
 - Keep dependencies updated
 - Use environment variables for sensitive data
 - Enable HTTPS in production
 - Implement rate limiting for API endpoints
+- Never commit API keys or secrets
+- Use `.env.template` for reference, not actual credentials
 
 ## 🚧 Best Practices
 
@@ -246,7 +352,7 @@ npm test
 ## 🛠️ Tech Stack
 
 - **Frontend**: React 18, Vite, Axios, React Markdown, React Syntax Highlighter
-- **Backend**: Node.js, Express, CORS, Dotenv
+- **Backend**: Node.js, Express, CORS, Dotenv, Google Gemini AI
 - **Styling**: CSS3 with CSS Variables
 - **Containerization**: Docker, Multi-stage builds
 - **Deployment**: Render, Railway, Fly.io, Vercel
