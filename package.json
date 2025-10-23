@@ -1,0 +1,9 @@
+{
+  "name": "chatbot-project-2025",
+  "version": "1.0.0",
+  "description": "Chatbot project with Vercel serverless functions",
+  "type": "module",
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0"
+  }
+}
