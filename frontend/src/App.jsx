@@ -12,6 +12,12 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
+  // API Configuration
+  // VITE_API_URL environment variable usage:
+  // - For local development: defaults to http://localhost:3001
+  // - For cloud deployment: set VITE_API_URL in your hosting platform (Vercel/Render/Railway)
+  //   Example: VITE_API_URL=https://your-backend.onrender.com
+  // - The VITE_ prefix is required for Vite to expose the variable to the frontend
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
   useEffect(() => {
@@ -43,58 +49,86 @@ function App() {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
+
   return (
-    <div className="app-container">
-      <header className="header">
-        <h1>AI Chatbot</h1>
+    <div className="app">
+      <header className="app-header">
+        <h1>🤖 Chatbot</h1>
         <button onClick={() => setDarkMode(!darkMode)} className="theme-toggle">
-          {darkMode ? '☀️ Light' : '🌙 Dark'}
+          {darkMode ? '☀️' : '🌙'}
         </button>
       </header>
 
       <div className="messages-container">
-        {messages.map((msg, idx) => (
-          <div key={idx} className={`message ${msg.role}`}>
-            <ReactMarkdown
-              components={{
-                code({ node, inline, className, children, ...props }) {
-                  const match = /language-(\w+)/.exec(className || '');
-                  return !inline && match ? (
-                    <SyntaxHighlighter
-                      style={darkMode ? vscDarkPlus : prism}
-                      language={match[1]}
-                      PreTag="div"
-                      {...props}
-                    >
-                      {String(children).replace(/\n$/, '')}
-                    </SyntaxHighlighter>
-                  ) : (
-                    <code className={className} {...props}>
-                      {children}
-                    </code>
-                  );
-                },
-              }}
-            >
-              {msg.content}
-            </ReactMarkdown>
+        {messages.length === 0 && (
+          <div className="welcome-message">
+            <h2>Welcome! 👋</h2>
+            <p>Start a conversation by typing a message below.</p>
+          </div>
+        )}
+        {messages.map((message, index) => (
+          <div key={index} className={`message ${message.role}`}>
+            <div className="message-content">
+              {message.role === 'user' ? (
+                <p>{message.content}</p>
+              ) : (
+                <ReactMarkdown
+                  components={{
+                    code({ node, inline, className, children, ...props }) {
+                      const match = /language-(\w+)/.exec(className || '');
+                      return !inline && match ? (
+                        <SyntaxHighlighter
+                          style={darkMode ? vscDarkPlus : prism}
+                          language={match[1]}
+                          PreTag="div"
+                          {...props}
+                        >
+                          {String(children).replace(/\n$/, '')}
+                        </SyntaxHighlighter>
+                      ) : (
+                        <code className={className} {...props}>
+                          {children}
+                        </code>
+                      );
+                    }
+                  }}
+                >
+                  {message.content}
+                </ReactMarkdown>
+              )}
+            </div>
           </div>
         ))}
-        {isLoading && <div className="loading">Thinking...</div>}
+        {isLoading && (
+          <div className="message assistant">
+            <div className="message-content loading">
+              <span className="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+              </span>
+            </div>
+          </div>
+        )}
         <div ref={messagesEndRef} />
       </div>
 
       <div className="input-container">
-        <input
-          type="text"
+        <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+          onKeyPress={handleKeyPress}
           placeholder="Type your message..."
           disabled={isLoading}
         />
         <button onClick={sendMessage} disabled={isLoading || !input.trim()}>
-          Send
+          {isLoading ? '⏳' : '📤'}
         </button>
       </div>
     </div>
